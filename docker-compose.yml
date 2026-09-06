@@ -14,7 +14,7 @@ services:
     tmpfs:
       - /run:exec,size=128M
     ports:
-      - "8080:8080"
+      - "8080:80"
     environment:
       TZ: ${FEEDER_TZ:-Europe/Amsterdam}
       READSB_DEVICE_TYPE: rtlsdr
