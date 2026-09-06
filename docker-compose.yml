@@ -36,8 +36,10 @@ services:
         mlat,feed.adsb.fi,31090;
         adsb,in.adsb.lol,30004,beast_reduce_plus_out;
         mlat,in.adsb.lol,31090;
-        adsb,feed1.adsbexchange.com,30004,beast_reduce_plus_out;
-        mlat,feed.adsbexchange.com,31090,39008,uuid=${ADSBX_UUID};
+        adsb,feed.planespotters.net,30004,beast_reduce_plus_out;
+        adsb,feed.theairtraffic.com,30004,beast_reduce_plus_out;
+        adsb,data.avdelphi.com,24999,beast_reduce_plus_out;
+        adsb,dati.flyitalyadsb.com,4905,beast_reduce_plus_out;
 
   fr24:
     image: ghcr.io/sdr-enthusiasts/docker-flightradar24:latest

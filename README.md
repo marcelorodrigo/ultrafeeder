@@ -2,7 +2,7 @@
 
 A three-service docker-compose stack for [docker-adsb-ultrafeeder](https://github.com/sdr-enthusiasts/docker-adsb-ultrafeeder), [docker-flightradar24](https://github.com/sdr-enthusiasts/docker-flightradar24), and [docker-airnavradar](https://github.com/sdr-enthusiasts/docker-airnavradar), deployed as a **Portainer Stack from a public Git repo**.
 
-Feeds: airplanes.live, adsb.fi, adsb.lol, ADS-B Exchange, Flightradar24, AirNav Radar.
+Feeds: airplanes.live, adsb.fi, adsb.lol, Flightradar24, AirNav Radar, Planespotters, TheAirTraffic, AvDelphi, FlyItalyAdsB.
 Web UI: tar1090 (port 8080), FR24 status (port 8754).
 
 ## Prerequisites
@@ -12,7 +12,7 @@ Web UI: tar1090 (port 8080), FR24 status (port 8754).
 - Docker 29+ with Compose v5+
 - Portainer CE running locally (Stacks / Compose mode)
 - Antenna connected, USB dongle plugged in
-- Your FR24 sharing key, ADS-B Exchange UUID, and AirNav Radar sharing key
+- Your FR24 sharing key and AirNav Radar sharing key
 
 ## Deploy via Portainer
 
@@ -43,7 +43,6 @@ Set these in the Portainer stack Environment panel. All have safe defaults — t
 | `ADSB_SDR_PPM` | `0` | No | Frequency correction — set to 0, tune later if needed |
 | `READSB_GAIN` | `auto` | No | RF gain: `auto` or a numeric value (e.g. `49.6`) |
 | `MULTIFEEDER_UUID` | *(empty)* | **YES** | Multi-feeder UUID — generate with `uuidgen` and set before deployment |
-| `ADSBX_UUID` | *(empty)* | **YES** | Your ADS-B Exchange sharing UUID |
 | `FR24_SHARING_KEY` | *(empty)* | **YES** | Your Flightradar24 sharing key |
 | `AIRNAVRADAR_SHARING_KEY` | *(empty)* | **YES** | Your AirNav Radar (rbfeeder) sharing key |
 
@@ -103,7 +102,6 @@ Check your feeder is visible on each aggregator's dashboard:
 - **airplanes.live:** https://www.airplanes.live/stats.php (enter your feeder name)
 - **adsb.fi:** https://adsb.fi/stats (look for your callsign)
 - **adsb.lol:** https://adsb.lol/stats
-- **ADS-B Exchange:** https://www.adsbexchange.com/stats/ (enter your UUID)
 - **Flightradar24:** https://www.flightradar24.com/data/feeds (your FR24 dashboard)
 - **AirNav Radar:** https://www.airnavradar.com (Account → Stations — claim receiver at https://www.airnavradar.com/raspberry-pi/claim)
 
@@ -157,7 +155,7 @@ Set `ADSB_SDR_SERIAL` in the Portainer environment panel to match.
 ### Feeder not showing on aggregator dashboards
 
 - Verify `FEEDER_LAT` / `FEEDER_LONG` / `FEEDER_ALT_M` are set to real values (not placeholders).
-- Verify `ADSBX_UUID`, `FR24_SHARING_KEY`, and `AIRNAVRADAR_SHARING_KEY` are set in the panel.
+- Verify `FR24_SHARING_KEY` and `AIRNAVRADAR_SHARING_KEY` are set in the panel.
 - Wait 15 minutes — some dashboards update on a delay.
 
 ## Updating
@@ -194,7 +192,10 @@ RTL-SDR dongle
 │  readsb ──► feeder ──► airplanes.live    │
 │           │          ► adsb.fi           │
 │           │          ► adsb.lol          │
-│           │          ► adsbexchange.com  │
+│           │          ► planespotters.net │
+│           │          ► theairtraffic.com │
+│           │          ► avdelphi.com      │
+│           │          ► flyitalyadsb.com  │
 │           │                              │
 │  mlathub ◄── mlat results from above    │
 │  tar1090 ──► web UI :8080               │
