@@ -54,3 +54,15 @@ services:
       FR24KEY: ${FR24_SHARING_KEY:-}
     tmpfs:
       - /var/log
+
+  airnavradar:
+    image: ghcr.io/sdr-enthusiasts/docker-airnavradar:latest
+    container_name: airnavradar
+    restart: unless-stopped
+    depends_on:
+      - ultrafeeder
+    environment:
+      BEASTHOST: ultrafeeder
+      SHARING_KEY: ${AIRNAVRADAR_SHARING_KEY:-}
+    tmpfs:
+      - /var/log

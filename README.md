@@ -1,8 +1,8 @@
 # UltraFeeder + FR24 — ADS-B Ground Station Stack
 
-A two-service docker-compose stack for [docker-adsb-ultrafeeder](https://github.com/sdr-enthusiasts/docker-adsb-ultrafeeder) and [docker-flightradar24](https://github.com/sdr-enthusiasts/docker-flightradar24), deployed as a **Portainer Stack from a public Git repo**.
+A three-service docker-compose stack for [docker-adsb-ultrafeeder](https://github.com/sdr-enthusiasts/docker-adsb-ultrafeeder), [docker-flightradar24](https://github.com/sdr-enthusiasts/docker-flightradar24), and [docker-airnavradar](https://github.com/sdr-enthusiasts/docker-airnavradar), deployed as a **Portainer Stack from a public Git repo**.
 
-Feeds: airplanes.live, adsb.fi, adsb.lol, ADS-B Exchange, Flightradar24.
+Feeds: airplanes.live, adsb.fi, adsb.lol, ADS-B Exchange, Flightradar24, AirNav Radar.
 Web UI: tar1090 (port 8080), FR24 status (port 8754).
 
 ## Prerequisites
@@ -12,7 +12,7 @@ Web UI: tar1090 (port 8080), FR24 status (port 8754).
 - Docker 29+ with Compose v5+
 - Portainer CE running locally (Stacks / Compose mode)
 - Antenna connected, USB dongle plugged in
-- Your FR24 sharing key and ADS-B Exchange UUID
+- Your FR24 sharing key, ADS-B Exchange UUID, and AirNav Radar sharing key
 
 ## Deploy via Portainer
 
@@ -45,6 +45,7 @@ Set these in the Portainer stack Environment panel. All have safe defaults — t
 | `MULTIFEEDER_UUID` | *(empty)* | **YES** | Multi-feeder UUID — generate with `uuidgen` and set before deployment |
 | `ADSBX_UUID` | *(empty)* | **YES** | Your ADS-B Exchange sharing UUID |
 | `FR24_SHARING_KEY` | *(empty)* | **YES** | Your Flightradar24 sharing key |
+| `AIRNAVRADAR_SHARING_KEY` | *(empty)* | **YES** | Your AirNav Radar (rbfeeder) sharing key |
 
 ### Generating your UUID
 
@@ -80,6 +81,11 @@ After deploying, wait **2–3 minutes** for readsb to lock the SDR and connect t
 # You should see:
 #   [fr24] connection established to ultrafeeder:30005
 #   [fr24] sharing data to FlightRadar24
+
+# Click the airnavradar container → Logs
+# You should see:
+#   Connection established to ultrafeeder:30005
+#   Connection with AirNav Radar server OK! Key accepted
 ```
 
 ### 2. Web UI — aircraft visible
@@ -99,6 +105,7 @@ Check your feeder is visible on each aggregator's dashboard:
 - **adsb.lol:** https://adsb.lol/stats
 - **ADS-B Exchange:** https://www.adsbexchange.com/stats/ (enter your UUID)
 - **Flightradar24:** https://www.flightradar24.com/data/feeds (your FR24 dashboard)
+- **AirNav Radar:** https://www.airnavradar.com (Account → Stations — claim receiver at https://www.airnavradar.com/raspberry-pi/claim)
 
 ## Troubleshooting
 
@@ -127,6 +134,16 @@ This is normal for the first 1–2 minutes while ultrafeeder starts up. fr24 ret
 docker logs ultrafeeder 2>&1 | grep -i "beast"
 ```
 
+### airnavradar: "cannot connect to host"
+
+Same as fr24 — normal for the first 1–2 minutes. If it persists after 5 minutes, verify ultrafeeder is serving beast:
+
+```bash
+docker logs airnavradar 2>&1 | tail -20
+```
+
+Also verify `AIRNAVRADAR_SHARING_KEY` is set in the Portainer environment panel.
+
 ### Wrong serial / multiple dongles
 
 If you have more than one RTL-SDR, find the correct serial:
@@ -140,7 +157,7 @@ Set `ADSB_SDR_SERIAL` in the Portainer environment panel to match.
 ### Feeder not showing on aggregator dashboards
 
 - Verify `FEEDER_LAT` / `FEEDER_LONG` / `FEEDER_ALT_M` are set to real values (not placeholders).
-- Verify `ADSBX_UUID` and `FR24_SHARING_KEY` are set in the panel.
+- Verify `ADSBX_UUID`, `FR24_SHARING_KEY`, and `AIRNAVRADAR_SHARING_KEY` are set in the panel.
 - Wait 15 minutes — some dashboards update on a delay.
 
 ## Updating
@@ -157,7 +174,7 @@ If you push a change to the compose file (e.g. adding a feeder), in Portainer go
 
 ```
 ultrafeeder/
-├── docker-compose.yml   # Stack definition (ultrafeeder + fr24)
+├── docker-compose.yml   # Stack definition (ultrafeeder + fr24 + airnavradar)
 ├── .env.example         # Annotated variable catalog (reference only)
 ├── .gitignore           # Ignores .env files with real secrets
 └── README.md            # This file
@@ -185,17 +202,18 @@ RTL-SDR dongle
 │  beast output :30005 ────────────────┐   │
 └──────────────────────────────────────│───┘
                                        │
-                                       ▼
-                              ┌────────────────┐
-                              │  fr24           │
-                              │  docker-fligh-  │
-                              │  tradar24:latest│
-                              │                 │
-                              │  reads beast    │
-                              │  from ultra-    │
-                              │  feeder:30005   │
-                              │                 │
-                              │  feeds FR24     │
-                              │  status :8754   │
-                              └─────────────────┘
+                        ┌──────────────┴──────────────┐
+                        ▼                             ▼
+               ┌────────────────┐           ┌────────────────┐
+               │  fr24           │           │  airnavradar    │
+               │  docker-fligh-  │           │  docker-airnav- │
+               │  tradar24:latest│           │  radar:latest   │
+               │                 │           │                 │
+               │  reads beast    │           │  reads beast    │
+               │  from ultra-    │           │  from ultra-    │
+               │  feeder:30005   │           │  feeder:30005   │
+               │                 │           │                 │
+               │  feeds FR24     │           │  feeds AirNav   │
+               │  status :8754   │           │  Radar          │
+               └─────────────────┘           └─────────────────┘
 ```
