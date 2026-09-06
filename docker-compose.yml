@@ -63,6 +63,10 @@ services:
       - ultrafeeder
     environment:
       BEASTHOST: ultrafeeder
+      LAT: ${FEEDER_LAT}
+      LONG: ${FEEDER_LONG}
+      ALT: ${FEEDER_ALT_M}
+      TZ: ${FEEDER_TZ:-Europe/Amsterdam}
       SHARING_KEY: ${AIRNAVRADAR_SHARING_KEY:-}
     tmpfs:
       - /var/log
