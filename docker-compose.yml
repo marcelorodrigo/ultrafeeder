@@ -4,8 +4,6 @@ services:
     container_name: ultrafeeder
     hostname: ultrafeeder
     restart: unless-stopped
-    healthcheck:
-      disable: true
     device_cgroup_rules:
       - "c 189:* rwm"
     volumes:
