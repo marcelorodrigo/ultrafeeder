@@ -1,3 +1,9 @@
+# Environment files with secrets
 .env
 .env.local
+.env.production
+stack.env
 *.env.local
+
+# Keep example file tracked
+!.env.example

@@ -42,7 +42,7 @@ Set these in the Portainer stack Environment panel. All have safe defaults — t
 | `ADSB_SDR_SERIAL` | `1090` | Yes | RTL-SDR iSerial — verify with `lsusb -v -d 0bda:2838 \| grep iSerial` |
 | `ADSB_SDR_PPM` | `0` | No | Frequency correction — set to 0, tune later if needed |
 | `READSB_GAIN` | `auto` | No | RF gain: `auto` or a numeric value (e.g. `49.6`) |
-| `MULTIFEEDER_UUID` | *(empty)* | No | Multi-feeder UUID — generate with `uuidgen` for stability; empty = auto-generated on first run |
+| `MULTIFEEDER_UUID` | *(empty)* | **YES** | Multi-feeder UUID — generate with `uuidgen` and set before deployment |
 | `ADSBX_UUID` | *(empty)* | **YES** | Your ADS-B Exchange sharing UUID |
 | `FR24_SHARING_KEY` | *(empty)* | **YES** | Your Flightradar24 sharing key |
 

@@ -4,6 +4,8 @@ services:
     container_name: ultrafeeder
     hostname: ultrafeeder
     restart: unless-stopped
+    healthcheck:
+      disable: true
     device_cgroup_rules:
       - "c 189:* rwm"
     volumes:
@@ -21,13 +23,13 @@ services:
       READSB_GAIN: ${READSB_GAIN:-auto}
       READSB_RTLSDR_DEVICE: ${ADSB_SDR_SERIAL:-1090}
       READSB_RTLSDR_PPM: ${ADSB_SDR_PPM:-0}
-      READSB_LAT: ${FEEDER_LAT:-51.505}
-      READSB_LON: ${FEEDER_LONG:-5.391}
-      READSB_ALT: ${FEEDER_ALT_M:-10}m
+      READSB_LAT: ${FEEDER_LAT:?FEEDER_LAT is required}
+      READSB_LON: ${FEEDER_LONG:?FEEDER_LONG is required}
+      READSB_ALT: ${FEEDER_ALT_M:?FEEDER_ALT_M is required}m
       READSB_RX_LOCATION_ACCURACY: 2
       READSB_STATS_RANGE: "true"
       UUID: ${MULTIFEEDER_UUID:-}
-      MLAT_USER: ${FEEDER_NAME:-ultrafeeder-pi3}
+      MLAT_USER: ${MLAT_USER:-ultrafeeder}
       TAR1090_PAGETITLE: ${FEEDER_NAME:-ultrafeeder-pi3}
       ULTRAFEEDER_CONFIG: >-
         adsb,feed.airplanes.live,30004,beast_reduce_plus_out;
@@ -44,7 +46,7 @@ services:
     container_name: fr24
     restart: unless-stopped
     ports:
-      - "8754:8754"
+      - "127.0.0.1:8754:8754"
     environment:
       BEASTHOST: ultrafeeder
       FR24KEY: ${FR24_SHARING_KEY:-}
