@@ -27,15 +27,11 @@ services:
       READSB_RX_LOCATION_ACCURACY: 2
       READSB_STATS_RANGE: "true"
       UUID: ${MULTIFEEDER_UUID:-}
-      MLAT_USER: ${MLAT_USER:-ultrafeeder}
       TAR1090_PAGETITLE: ${FEEDER_NAME:-ultrafeeder-pi3}
       ULTRAFEEDER_CONFIG: >-
         adsb,feed.airplanes.live,30004,beast_reduce_plus_out;
-        mlat,feed.airplanes.live,31090;
         adsb,feed.adsb.fi,30004,beast_reduce_plus_out;
-        mlat,feed.adsb.fi,31090;
         adsb,in.adsb.lol,30004,beast_reduce_plus_out;
-        mlat,in.adsb.lol,31090;
         adsb,feed.planespotters.net,30004,beast_reduce_plus_out;
         adsb,feed.theairtraffic.com,30004,beast_reduce_plus_out;
         adsb,data.avdelphi.com,24999,beast_reduce_plus_out;

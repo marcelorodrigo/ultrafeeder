@@ -197,7 +197,6 @@ RTL-SDR dongle
 │           │          ► avdelphi.com      │
 │           │          ► flyitalyadsb.com  │
 │           │                              │
-│  mlathub ◄── mlat results from above    │
 │  tar1090 ──► web UI :8080               │
 │                                          │
 │  beast output :30005 ────────────────┐   │
