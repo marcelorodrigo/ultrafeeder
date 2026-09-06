@@ -44,7 +44,7 @@ services:
     depends_on:
       - ultrafeeder
     ports:
-      - "127.0.0.1:8754:8754"
+      - "8754:8754"
     environment:
       BEASTHOST: ultrafeeder
       FR24KEY: ${FR24_SHARING_KEY:-}
